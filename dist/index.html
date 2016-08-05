@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div id="Switcher-row" class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="showBlock nav-link active" href="#">Block</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="showJavascript nav-link" href="#">Javascript</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="showXml nav-link" href="#">XML</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="Blockly-row" class="row">
+            <div id="Blockly-col" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div id="Blockly"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="js/jquery.blockly.min.js"></script>
+    <script src="js/blockly-blocks-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js"></script>
+    <script>
+    (function() {
+        $(document).ready(function() {
+            // *****************************************************************
+            // ToolBoxを生成する
+            // オプション：toolBoxXMLText　に XML(Text)が渡せれば、生成の手段は問わない
+
+            var $xml = $('<xml />');
+            // Logic
+            var $categoryLogic = $('<category name="論理" colour="210" />');
+            $categoryLogic.append('<block type="controls_if"></block>');
+            $categoryLogic.append('<block type="logic_compare"></block>');
+            $categoryLogic.append('<block type="logic_operation"></block>');
+            $categoryLogic.append('<block type="logic_negate"></block>');
+            $categoryLogic.append('<block type="logic_boolean"></block>');
+            $categoryLogic.append('<block type="logic_null"></block>');
+            $categoryLogic.append('<block type="logic_ternary"></block>');
+
+            // Loops
+            var $categoryLoops = $('<category name="繰り返し" colour="120">');
+            $categoryLoops.append('<block type="controls_repeat_ext"><value name="TIMES"><shadow type="math_number"><field name="NUM">10</field></shadow></value></block>')
+            $categoryLoops.append('<block type="controls_whileUntil"></block>');
+            $categoryLoops.append('<block type="controls_for"><value name="FROM"><shadow type="math_number"><field name="NUM">1</field></shadow></value><value name="TO"><shadow type="math_number"><field name="NUM">10</field></shadow></value><value name="BY"><shadow type="math_number"><field name="NUM">1</field></shadow></value></block>');
+            $categoryLoops.append('<block type="controls_forEach"></block>');
+            $categoryLoops.append('<block type="controls_flow_statements"></block>');
+
+            // Math
+            var $categoryMath = $('<category name="数学" colour="230" />');
+            $categoryMath.append('<block type="math_number"></block>');
+            $categoryMath.append('<block type="math_arithmetic"><value name="A"><shadow type="math_number"><field name="NUM">1</field></shadow></value><value name="B"><shadow type="math_number"><field name="NUM">1</field></shadow></value></block>');
+            $categoryMath.append('<block type="math_single"><value name="NUM"><shadow type="math_number"><field name="NUM">9</field></shadow></value></block>');
+            $categoryMath.append('<block type="math_trig"><value name="NUM"><shadow type="math_number"><field name="NUM">45</field></shadow></value></block>');
+            $categoryMath.append('<block type="math_constant"></block>');
+            $categoryMath.append('<block type="math_number_property"><value name="NUMBER_TO_CHECK"><shadow type="math_number"><field name="NUM">0</field></shadow></value></block>');
+            $categoryMath.append('<block type="math_change"><value name="DELTA"><shadow type="math_number"><field name="NUM">1</field></shadow></value></block>');
+            $categoryMath.append('<block type="math_round"><value name="NUM"><shadow type="math_number"><field name="NUM">3.1</field></shadow></value></block>');
+            $categoryMath.append('<block type="math_on_list"></block>');
+            $categoryMath.append('<block type="math_modulo"><value name="DIVIDEND"><shadow type="math_number"><field name="NUM">64</field></shadow></value><value name="DIVISOR"><shadow type="math_number"><field name="NUM">10</field></shadow></value></block>');
+            $categoryMath.append('<block type="math_constrain"><value name="VALUE"><shadow type="math_number"><field name="NUM">50</field></shadow></value><value name="LOW"><shadow type="math_number"><field name="NUM">1</field></shadow></value><value name="HIGH"><shadow type="math_number"><field name="NUM">100</field></shadow></value></block>');
+            $categoryMath.append('<block type="math_random_int"><value name="FROM"><shadow type="math_number"><field name="NUM">1</field></shadow></value><value name="TO"><shadow type="math_number"><field name="NUM">100</field></shadow></value></block>');
+            $categoryMath.append('<block type="math_random_float"></block>');
+
+            // Text
+            var $categoryText = $('<category name="テキスト" colour="160" />');
+            $categoryText.append('<block type="text"></block>');
+            $categoryText.append('<block type="text_join"></block>');
+            $categoryText.append('<block type="text_append"><value name="TEXT"><shadow type="text"></shadow></value></block>');
+            $categoryText.append('<block type="text_length"><value name="VALUE"><shadow type="text"><field name="TEXT">abc</field></shadow></value></block>');
+            $categoryText.append('<block type="text_isEmpty"><value name="VALUE"><shadow type="text"><field name="TEXT"></field></shadow></value></block>');
+            $categoryText.append('<block type="text_indexOf"><value name="VALUE"><block type="variables_get"><field name="VAR">{textVariable}</field></block></value><value name="FIND"><shadow type="text"><field name="TEXT">abc</field></shadow></value></block>');
+            $categoryText.append('<block type="text_charAt"><value name="VALUE"><block type="variables_get"><field name="VAR">{textVariable}</field></block></value></block>');
+            $categoryText.append('<block type="text_getSubstring"><value name="STRING"><block type="variables_get"><field name="VAR">{textVariable}</field></block></value></block>');
+            $categoryText.append('<block type="text_changeCase"><value name="TEXT"><shadow type="text"><field name="TEXT">abc</field></shadow></value></block>');
+            $categoryText.append('<block type="text_trim"><value name="TEXT"><shadow type="text"><field name="TEXT">abc</field></shadow></value></block>');
+
+            // List
+            var $categoryList = $('<category name="リスト" colour="260">');
+            $categoryList.append('<block type="lists_create_with"><mutation items="0"></mutation></block>');
+            $categoryList.append('<block type="lists_create_with"></block>');
+            $categoryList.append('<block type="lists_repeat"><value name="NUM"><shadow type="math_number"><field name="NUM">5</field></shadow></value></block>');
+            $categoryList.append('<block type="lists_length"></block>');
+            $categoryList.append('<block type="lists_isEmpty"></block>');
+            $categoryList.append('<block type="lists_indexOf"><value name="VALUE"><block type="variables_get"><field name="VAR">{listVariable}</field></block></value></block>');
+            $categoryList.append('<block type="lists_getIndex"><value name="VALUE"><block type="variables_get"><field name="VAR">{listVariable}</field></block></value></block>');
+            $categoryList.append('<block type="lists_setIndex"><value name="LIST"><block type="variables_get"><field name="VAR">{listVariable}</field></block></value></block>');
+            $categoryList.append('<block type="lists_getSublist"><value name="LIST"><block type="variables_get"><field name="VAR">{listVariable}</field></block></value></block>');
+            $categoryList.append('<block type="lists_split"><value name="DELIM"><shadow type="text"><field name="TEXT">,</field></shadow></value></block>');
+            $categoryList.append('<block type="lists_sort"></block>');
+
+            // Error
+            var $categoryError = $('<category name="エラー処理" colour="210">');
+            $categoryError.append('<block type="controls_try"></block>');
+            $categoryError.append('<block type="throw_new_error"></block>');
+
+            $xml.append($categoryLogic);
+            $xml.append($categoryLoops);
+            $xml.append($categoryMath);
+            $xml.append($categoryText);
+            $xml.append($categoryList);
+            $xml.append('<sep></sep>');
+            $xml.append('<category name="変数" colour="330" custom="VARIABLE"></category>'); // 変数
+            $xml.append('<category name="関数" colour="290" custom="PROCEDURE"></category>'); // 関数
+            $xml.append($categoryError);
+
+            var $parseWrapper = $('<div>');
+            $parseWrapper.append($xml);
+            var toolBoxXMLText = $parseWrapper.html();
+
+            // *****************************************************************
+            // プラグイン初期化
+
+            var blockly = $('#Blockly').blockly({
+                codeTypes: [{
+                    name: 'javascript'
+                }],
+                toolBoxXMLText: toolBoxXMLText,
+                media: "https://dl.dropboxusercontent.com/u/438976/Qlockly/media/"
+            });
+
+            // *****************************************************************
+            // ビューの操作
+            $(".showJavascript").click(function(event) {
+                blockly.show("javascript");
+                $(this).addClass('active');
+                $(".showXml").removeClass('active');
+                $(".showBlock").removeClass('active');
+            });
+
+            $(".showBlock").click(function(event) {
+                blockly.show("blocks");
+                $(this).addClass('active');
+                $(".showXml").removeClass('active');
+                $(".showJavascript").removeClass('active');
+            });
+
+            $(".showXml").click(function(event) {
+                blockly.show("xml");
+                $(this).addClass('active');
+                $(".showBlock").removeClass('active');
+                $(".showJavascript").removeClass('active');
+            });
+
+            // *****************************************************************
+            // 保存と復元に関して...
+            // XMLをセットする（.getXMLで現在のXMLを取得できるので、ソレを保存に使う）
+            blockly.setXML('<xml xmlns="http://www.w3.org/1999/xhtml"><block type="variables_set" id="o~.XhM22:0I5=%u]sQ:I" x="13" y="88"><field name="VAR">a</field><value name="VALUE"><block type="text" id="AVJLzTm+UzjeKVV@oM:p"><field name="TEXT">Hello! Blockly!</field></block></value></block></xml>');
+        });
+    })(window.jQuery);
+    </script>
+</body>
+
+</html>
