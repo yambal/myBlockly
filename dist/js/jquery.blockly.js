@@ -1696,10 +1696,9 @@ jQuery.fn.blockly = function(options) {
     }
 
     var setCodeType = function(codeType) {
-        //console.log("setCodeType:" + codeType);
+        onResize();
         selectedCodeType = codeType;
-        renderContent();
-        Blockly.svgResize(workspace);
+        
 
         // 各Contentの表示切替
         $('.' + settings.classBlocklyCodeContent).each(function(index, el) {
@@ -1713,6 +1712,9 @@ jQuery.fn.blockly = function(options) {
         } else {
             workspace.setVisible(false);
         }
+
+        Blockly.svgResize(workspace);
+        renderContent();
     }
 
     var renderContent = function() {
