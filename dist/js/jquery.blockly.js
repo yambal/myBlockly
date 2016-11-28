@@ -1662,7 +1662,7 @@ jQuery.fn.blockly = function(options) {
         }
     }
 
-    var loadToolBoxXML = function(success, error) {
+    var loadToolBoxXML = function(successCB, error) {
         console.log(settings.toolBoxXML);
         if (settings.toolBoxXML) {
             $.ajax({
@@ -1674,7 +1674,7 @@ jQuery.fn.blockly = function(options) {
                     alert("ロード失敗");
                 },
                 success: function(toolboxText) {
-                    console.log(toolboxText);
+                    //console.log(toolboxText);
                     /*
                     toolboxText = toolboxText.replace(/{(\w+)}/g,
                         function(m, p1) {
@@ -1682,7 +1682,7 @@ jQuery.fn.blockly = function(options) {
                         });
                     */
                     var toolboxXml = Blockly.Xml.textToDom(toolboxText);
-                    success(toolboxXml);
+                    successCB(toolboxXml);
                 }
             });
             return;
@@ -1770,6 +1770,18 @@ jQuery.fn.blockly = function(options) {
     this.setXML = function(xmlText){
         var xml = Blockly.Xml.textToDom(xmlText);
         Blockly.Xml.domToWorkspace(xml, workspace);
+        onResize();
+        Blockly.svgResize(workspace);
+    }
+    this.clear = function() {
+        console.log("clear");
+        setTimeout(function() {
+                var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"></xml>');
+                Blockly.Xml.domToWorkspace(xml, workspace);
+                onResize();
+                Blockly.svgResize(workspace);
+            }, 1000
+        )
     }
 
     return this;
