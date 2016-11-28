@@ -42,9 +42,11 @@
     <script>
     (function() {
         $(document).ready(function() {
+            /*
             // *****************************************************************
             // ToolBoxを生成する
             // オプション：toolBoxXMLText　に XML(Text)が渡せれば、生成の手段は問わない
+            // この他、toolBoxXML にXMLへのURLを指定することも可能
 
             var $xml = $('<xml />');
             // Logic
@@ -126,6 +128,7 @@
             var $parseWrapper = $('<div>');
             $parseWrapper.append($xml);
             var toolBoxXMLText = $parseWrapper.html();
+            */
 
             // *****************************************************************
             // プラグイン初期化
@@ -133,8 +136,12 @@
                 codeTypes: [{
                     name: 'javascript'
                 }],
-                toolBoxXMLText: toolBoxXMLText,
-                media: "https://dl.dropboxusercontent.com/u/438976/Qlockly/media/"
+                //toolBoxXMLText: toolBoxXMLText,
+                toolBoxXML : "https://raw.githubusercontent.com/yambal/myBlockly/master/dist/toolbox-sample.xml",
+                media: "https://dl.dropboxusercontent.com/u/438976/Qlockly/media/",
+                onInitized : function(){
+                    blockly.setXML('<xml xmlns="http://www.w3.org/1999/xhtml"><block type="variables_set" id="o~.XhM22:0I5=%u]sQ:I" x="0" y="0"><field name="VAR">a</field><value name="VALUE"><block type="text" id="AVJLzTm+UzjeKVV@oM:p"><field name="TEXT">Hello! Blockly!</field></block></value></block></xml>');
+                }
             });
 
             // *****************************************************************
@@ -163,7 +170,7 @@
             // *****************************************************************
             // 保存と復元に関して...
             // XMLをセットする（.getXMLで現在のXMLを取得できるので、ソレを保存に使う）
-            blockly.setXML('<xml xmlns="http://www.w3.org/1999/xhtml"><block type="variables_set" id="o~.XhM22:0I5=%u]sQ:I" x="0" y="0"><field name="VAR">a</field><value name="VALUE"><block type="text" id="AVJLzTm+UzjeKVV@oM:p"><field name="TEXT">Hello! Blockly!</field></block></value></block></xml>');
+            
         });
     })(window.jQuery);
     </script>
