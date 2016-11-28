@@ -3,6 +3,9 @@
 
 jQuery Plug-in とし、いくぶん扱いやすくした
 
+# デモ
+https://rawgit.com/yambal/myBlockly/master/dist/index.html
+
 ## サンプル
 Blockly の内部に構築する例。
 
